@@ -25,6 +25,7 @@
 		37689952D217430DB3CD00BA /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F78B92C24355403DBAE17B70 /* libRCTBackgroundGeolocation.a */; };
 		79B475CB72284EA7AA9F0E8F /* libRNLocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 962131822DB74249967AC51A /* libRNLocation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		C50639CB1DA28BE6006DC214 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C50639C41DA28BD9006DC214 /* libRCTPushNotification.a */; };
 		C5063A0D1DA2AB9A006DC214 /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C50639FE1DA2AAAA006DC214 /* libRCTBackgroundGeolocation.a */; };
 		C5063A101DA2AD05006DC214 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C5063A091DA2AB4F006DC214 /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
@@ -114,6 +115,14 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNLocation;
 		};
+
+		C50639C31DA28BD9006DC214 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C50639BA1DA28BD9006DC214 /* RCTPushNotification.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTPushNotification;
+		};
 		C50639FD1DA2AAAA006DC214 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A67D6190EDE74C389F95B9E0 /* RCTBackgroundGeolocation.xcodeproj */;
@@ -147,6 +156,7 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		962131822DB74249967AC51A /* libRNLocation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNLocation.a; sourceTree = "<group>"; };
+		C50639BA1DA28BD9006DC214 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		A67D6190EDE74C389F95B9E0 /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		C5063A091DA2AB4F006DC214 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		F78B92C24355403DBAE17B70 /* libRCTBackgroundGeolocation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTBackgroundGeolocation.a; sourceTree = "<group>"; };
@@ -165,6 +175,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C50639CB1DA28BE6006DC214 /* libRCTPushNotification.a in Frameworks */,
 				C5063A101DA2AD05006DC214 /* libsqlite3.tbd in Frameworks */,
 				C5063A0D1DA2AB9A006DC214 /* libRCTBackgroundGeolocation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -292,6 +303,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				C50639BA1DA28BD9006DC214 /* RCTPushNotification.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -341,6 +353,14 @@
 			isa = PBXGroup;
 			children = (
 				C502CDBD1DA2608A00F44EF9 /* libRNLocation.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C50639BB1DA28BD9006DC214 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C50639C41DA28BD9006DC214 /* libRCTPushNotification.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -451,6 +471,10 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
+					ProductGroup = C50639BB1DA28BD9006DC214 /* Products */;
+					ProjectRef = C50639BA1DA28BD9006DC214 /* RCTPushNotification.xcodeproj */;
+				},
+				{
 					ProductGroup = 139105B71AF99BAD00B5F7CC /* Products */;
 					ProjectRef = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
 				},
@@ -559,6 +583,13 @@
 			fileType = archive.ar;
 			path = libRNLocation.a;
 			remoteRef = C502CDBC1DA2608A00F44EF9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C50639C41DA28BD9006DC214 /* libRCTPushNotification.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTPushNotification.a;
+			remoteRef = C50639C31DA28BD9006DC214 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		C50639FE1DA2AAAA006DC214 /* libRCTBackgroundGeolocation.a */ = {
@@ -697,6 +728,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-gps",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 				);
 				INFOPLIST_FILE = PeopleInTheOffice/Info.plist;
@@ -722,6 +754,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 					"$(SRCROOT)/../node_modules/react-native-gps",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 				);
 				INFOPLIST_FILE = PeopleInTheOffice/Info.plist;
