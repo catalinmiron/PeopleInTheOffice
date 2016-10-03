@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Home from './Home';
 import Counter from './Counter';
+import Map from './Map';
 import GpsLocation from './GpsLocation';
 
 const { CardStack } = NavigationExperimental;
@@ -25,7 +26,7 @@ export default class Router extends Component {
   renderScene = props => {
     switch (props.scene.key) {
       case 'scene_home':
-        return <Home navigate={this.handleNavigation} />;
+        return <Map navigate={this.handleNavigation} />;
       case 'scene_counter':
         return <Counter navigate={this.handleNavigation} />;
       case 'gps':
