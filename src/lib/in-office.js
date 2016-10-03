@@ -1,6 +1,7 @@
 const turf = require('turf-inside')
+const bucharest = require('./bucharest-office')
 
-module.exports = (longitude, latitude, office = 'bucharest') => {
+module.exports = (longitude, latitude) => {
   return turf({
     "type": "Feature",
     "properties": {},
@@ -11,5 +12,5 @@ module.exports = (longitude, latitude, office = 'bucharest') => {
         latitude
       ]
     }
-  }, require(`./${office}-office`))
+  }, bucharest)
 }
