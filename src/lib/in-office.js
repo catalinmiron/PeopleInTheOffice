@@ -11,5 +11,5 @@ module.exports = (longitude, latitude, office = 'bucharest') => {
         latitude
       ]
     }
-  }, require(`./${office}-office`))
+  }, require(`./bucharest-office`))
 }

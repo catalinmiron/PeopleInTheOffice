@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, DeviceEventEmitter, Linking, Dimensions, TouchableHighlight } from 'react-native'
+import { Vibration, Platform, AppRegistry, StyleSheet, Text, View, DeviceEventEmitter, Linking, Dimensions, TouchableHighlight } from 'react-native'
 import moment from 'moment'
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
 var { RNLocation: Location } = require('NativeModules');
+import inOffice from '../lib/in-office';
 
 export default class Home extends Component {
 
@@ -26,14 +27,22 @@ export default class Home extends Component {
 
   componentWillMount() {
     Location.requestWhenInUseAuthorization()
-    Location.startUpdatingLocation()
-    // Location.setDistanceFilter(5.0)
-    // Location.setDesiredAccuracy(1.0)
+    // Location.startUpdatingLocation()
+    if (Platform.OS === 'ios') {
+      Location.setDistanceFilter(5.0)
+      Location.setDesiredAccuracy(1.0)
+    }
     Location.setAllowsBackgroundLocationUpdates = true
     DeviceEventEmitter.addListener('locationUpdated', (location) => {
+      Vibration.vibrate()
       this.setState({'location':location})
-      debugger;
     })
+  }
+
+  isInOffice() {
+    const {longitude, latitude} = this.state.location;
+    // inOffice(longitude, latitude, office)
+    return inOffice(longitude, latitude);
   }
 
   render() {
@@ -66,16 +75,16 @@ export default class Home extends Component {
         <View style={styles.row}>
           <View style={[styles.detailBox,{width:deviceWidth/3}]}>
             <Text style={styles.text}>
-              Course
+              in office:
             </Text>
             <Text style={[styles.detail,{fontSize:25}]}>
-              {this.state.location.speed}
+              {this.isInOffice() ? 'true' : 'false'}
             </Text>
           </View>
 
           <View style={[styles.detailBox,{width:deviceWidth/3}]}>
             <Text style={styles.text}>
-              Speed
+              Speed:
             </Text>
             <Text style={[styles.detail,{fontSize:25}]}>
               {this.state.location.coords}
