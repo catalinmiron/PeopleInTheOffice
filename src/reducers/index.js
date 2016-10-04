@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import counter from './counter';
+import people from './people';
 
 export default combineReducers({
-  counter
+  people,
+  server: (state) => state || null
 });

@@ -62,6 +62,8 @@ class Map extends Component {
       const region = Object.assign({}, location, { latitudeDelta, longitudeDelta });
       // Alert.alert(JSON.stringify(location))
       const xxx = this.isInOffice(location) ? 'true' : 'false'
+
+
       const annotations = this.state.annotations.slice(0);
       annotations.push(Object.assign({}, location, { image: require('../images/TrackingDot.png') }));
       this.setState({ annotations, region });
