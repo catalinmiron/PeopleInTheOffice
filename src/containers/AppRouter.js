@@ -7,14 +7,14 @@ import Home from './Home';
 import Map from './Map';
 import Counter from './Counter';
 
+var PushNotification = require('react-native-push-notification');
+
 @connect(
   state => state,
   dispatch => ({ dispatch })
 )
 export default class AppRouter extends Component {
   componentWillMount() {
-    var PushNotification = require('react-native-push-notification');
-
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
       onRegister: function(token) {

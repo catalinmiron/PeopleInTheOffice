@@ -11,6 +11,8 @@ import {
 import PushNotification from 'react-native-push-notification'
 import inOffice from '../lib/in-office';
 import {Actions} from 'react-native-router-flux';
+import Device from '../components/DeviceInfo';
+
 
 export default class Home extends Component {
 
@@ -58,6 +60,7 @@ export default class Home extends Component {
         <Text>
           people in the office
         </Text>
+        <Device />
       </View>
       <TouchableOpacity style={styles.mapButton} onPress={() => Actions.map()}>
         <Text style={styles.mapButtonText}>Map</Text>
