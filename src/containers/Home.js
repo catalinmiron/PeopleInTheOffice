@@ -10,7 +10,6 @@ import {
 
 import PushNotification from 'react-native-push-notification'
 import {Actions} from 'react-native-router-flux';
-import Device from '../components/DeviceInfo';
 import DeviceInfo from 'react-native-device-info';
 
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
@@ -150,13 +149,9 @@ export default class Home extends Component {
           {this.state.onlinePpl}
         </Text>
         <Text>
-          people in the office {this.state.inOffice ? 'true' : 'false'}
+          people in the office
         </Text>
-        <Device />
       </View>
-      <TouchableOpacity style={styles.mapButton} onPress={() => Actions.map()}>
-        <Text style={styles.mapButtonText}>Map</Text>
-      </TouchableOpacity>
     </View>;
   }
 }
