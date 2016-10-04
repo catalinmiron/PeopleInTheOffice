@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PeopleInTheOffice</string>
+    <string name="account_type">com.PeopleInTheOffice.account</string>
+    <string name="content_authority">com.PeopleInTheOffice.authority</string>
 </resources>

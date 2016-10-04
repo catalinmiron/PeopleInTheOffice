@@ -8,7 +8,9 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
-import com.syarul.rnlocation.RNLocation;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.marianhello.react.BackgroundGeolocationPackage;
 
 public class MainActivity extends ReactActivity implements DefaultHardwareBackBtnHandler {
 
@@ -34,7 +36,9 @@ public class MainActivity extends ReactActivity implements DefaultHardwareBackBt
                 .setBundleAssetName("index.android.bundle")
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
-                .addPackage(new RNLocation()) // <-- Register package here
+                .addPackage(new RNDeviceInfo())
+                .addPackage(new ReactNativePushNotificationPackage())
+                .addPackage(new BackgroundGeolocationPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
