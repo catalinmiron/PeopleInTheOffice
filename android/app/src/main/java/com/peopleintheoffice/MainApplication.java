@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.pusherman.networkinfo.RNNetworkInfoPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.marianhello.react.BackgroundGeolocationPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
               new RNDeviceInfo(),
           new MainReactPackage(),
+            new RNNetworkInfoPackage(),
             new LinearGradientPackage(),
             new ReactNativePushNotificationPackage(),
             new BackgroundGeolocationPackage()

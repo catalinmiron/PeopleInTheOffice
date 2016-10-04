@@ -12,6 +12,7 @@ import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.marianhello.react.BackgroundGeolocationPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.pusherman.networkinfo.RNNetworkInfoPackage;
 
 public class MainActivity extends ReactActivity implements DefaultHardwareBackBtnHandler {
 
@@ -41,6 +42,7 @@ public class MainActivity extends ReactActivity implements DefaultHardwareBackBt
                 .addPackage(new ReactNativePushNotificationPackage())
                 .addPackage(new BackgroundGeolocationPackage())
                 .addPackage(new LinearGradientPackage())
+                .addPackage(new RNNetworkInfoPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();

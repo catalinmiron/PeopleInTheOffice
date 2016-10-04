@@ -1,9 +1,10 @@
 const Parse = require('parse/react-native')
+import {Alert} from 'react-native'
 // import Person from './person-model';
 
 Parse.initialize('hackathon')
-// Parse.serverURL = 'http://192.168.1.137:8080/parse'
-Parse.serverURL = 'http://7090bdb8.ngrok.io/parse'
+Parse.serverURL = 'http://192.168.1.137:8080/parse'
+// Parse.serverURL = 'http://7090bdb8.ngrok.io/parse'
 
 function updateLocation(uniqueId, isInOffice) {
   // const install = new Person(uniqueId, isInOffice)

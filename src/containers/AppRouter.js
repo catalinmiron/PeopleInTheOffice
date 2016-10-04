@@ -5,7 +5,6 @@ import {Actions, Scene, Router, Reducer, Schema} from 'react-native-router-flux'
 
 import Home from './Home';
 import Map from './Map';
-import Counter from './Counter';
 
 var PushNotification = require('react-native-push-notification');
 
@@ -55,7 +54,6 @@ export default class AppRouter extends Component {
     return <Router sceneStyle={{backgroundColor: '#fff'}}>
       <Scene key="root">
         <Scene key="home" component={Home} initial hideNavBar/>
-        <Scene key="counter" component={Counter}/>
         <Scene key="map" component={Map} hideNavBar={false}/>
       </Scene>
     </Router>

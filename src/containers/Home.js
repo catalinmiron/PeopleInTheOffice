@@ -6,151 +6,110 @@ import {
   Text,
   View,
   TouchableOpacity,
-  StatusBar
+  StatusBar,
+  NetInfo
 } from 'react-native'
+
+import _ from 'lodash'
 
 import PushNotification from 'react-native-push-notification'
 import {Actions} from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
+import NetworkInfo from 'react-native-network-info';
+
 
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
-import Client from '../lib/parse-main'
+// import Client from '../lib/parse-main'
 import inOffice from '../lib/in-office'
 import LinearGradient from 'react-native-linear-gradient';
 
 const light = '#CB74FF';
 const dark = '#7737FF';
 const lightText = '#DABDFF'
+//
+// BackgroundGeolocation.configure({
+//   desiredAccuracy: 5,
+//   stationaryRadius: 0,
+//   distanceFilter: 2,
+//   debug: true,
+//   activityType: 'Fitness',
+//   stopOnTerminate: false,
+//   interval: 1000,
+//   fastestInterval: 500,
+//   activitiesInterval:  1000,
+//   stopOnStillActivity: false,
+//   locationTimeout: 100,
+//   url: 'http://192.168.1.137:8081/parse',
+//   httpHeaders: {
+//     'X-Parse-Application-Id': 'hackathon'
+//   }
+// });
 
-BackgroundGeolocation.configure({
-  desiredAccuracy: 30,
-  stationaryRadius: 0,
-  distanceFilter: 2,
-  debug: true,
-  activityType: 'Fitness',
-  stopOnTerminate: false,
-  interval: 1000,
-  fastestInterval: 500,
-  activitiesInterval:  1000,
-  stopOnStillActivity: false,
-  locationTimeout: 100,
-  url: 'http://192.168.1.137:8081/parse',
-  httpHeaders: {
-    'X-Parse-Application-Id': 'hackathon'
-  }
-});
+// BackgroundGeolocation.start(() => {
+//   Alert.alert('started!')
+//   console.log('[DEBUG] BackgroundGeolocation started successfully');
+// });
 
-BackgroundGeolocation.start(() => {
-  Alert.alert('started!')
-  console.log('[DEBUG] BackgroundGeolocation started successfully');
-});
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as PeopleActions from '../actions/people';
 
+
+const uid = DeviceInfo.getUniqueID();
+
+@connect(
+  state => ({
+    people: state.people
+  }),
+  dispatch => bindActionCreators(PeopleActions, dispatch)
+)
 export default class Home extends Component {
 
   constructor() {
     super();
-
-    this.state = {
-      onlinePpl: 0,
-      inOffice: null,
-      uid: DeviceInfo.getUniqueID(),
-      counter: 0
-    }
-    this.subscription = null;
   }
 
   componentWillMount() {
+    this.props.listen();
     if (Platform.OS === 'ios') {
       StatusBar.setBarStyle('light-content');
-    } else {
-      StatusBar.setTranslucent(true)
-      StatusBar.setBackgroundColor('transparent')
     }
+  }
 
-    this.subscription = Client.createSubscription();
+  componentWillUnmount() {
+    this.props.unlisten();
   }
 
   componentDidMount() {
-    // Client.updateLocation(this.state.uid, false)
-    Client.getOfficeDetails((res) => {
-      this.setState({
-        onlinePpl: res.get('online')
+    NetInfo.addEventListener('change', (xxx) => {
+      NetworkInfo.getSSID((ssid) => {
+        if(ssid.toLowerCase() === 'hootguest') {
+          this.props.setStatus(true)
+        } else {
+          this.props.setStatus(false)
+        }
       })
-    });
 
-    Client.onOnlineChange(this.subscription, (res) => {
-      this.setState({
-        onlinePpl: res.get('online')
-      })
-    });
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Alert.alert(String(position.coords.longitude), String(position.coords.latitude))
-        this.setState({
-          location: position.coords,
-          inOffice: inOffice(position.coords.longitude, position.coords.latitude)
-        })
-      },
-      (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 1000, maximumAge: 0}
-    );
-
-    BackgroundGeolocation.on('location', (location) => {
-      // console.log('[DEBUG] BackgroundGeolocation location', location);
-      const {longitude, latitude} = location;
-
-      // Alert.alert('location changed');
-
-      this.notifyUser(location);
-
-
-      Client.updateLocation(this.state.uid, inOffice(longitude, latitude))
-
-
-      this.setState({
-        counter: this.state.counter + 1,
-        location,
-        inOffice: inOffice(longitude, latitude)
-      })
-    });
-
-
-  //   BackgroundGeolocation.on('stationary', (stationaryLocation) => {
-   //
-      // Alert.alert('stationary')
-  //     //handle stationary locations here
-  //     //  Actions.sendLocation(stationaryLocation);
-  //     // console.log('[DEBUG] BackgroundGeolocation location', location);
-  //     const {longitude, latitude} = stationaryLocation;
-      // Alert.alert(JSON.stringify(stationaryLocation))
-   //
-  //     this.setState({
-  //       location: stationaryLocation,
-  //       inOffice: inOffice(longitude, latitude)
-  //     })
-  //  });
+      if (xxx.toLowerCase() !== 'wifi') {
+        this.props.setStatus(false)
+      }
+    })
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (!nextState.inOffice && !this.state.inOffice) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.people.isLoading) {
       return;
     }
-    if(nextState.inOffice !== this.state.inOffice) {
-      const {longitude, latitude} = nextState.location;
-
-      // Alert.alert('will update');
-      // Alert.alert(this.state.inOffice + ' -- ' + nextState.inOffice + ' -- ' + inOffice(longitude, latitude))
-      // Client.updateLocation(this.state.uid, inOffice(longitude, latitude))
+    if(nextProps.people.people[uid] && this.getOnlinePeople(nextProps.people.people) === 1) {
+      this.notifyUser()
     }
   }
 
-  componentWIllUnmount() {
-    Client.unsubscribe(this.subscription);
-    this.subscription = null;
+  getOnlinePeople(people = this.props.people.people) {
+    return _.filter(people, (item) => item).length
   }
 
-  notifyUser(location) {
+  notifyUser() {
     PushNotification.localNotification({
       /* Android Only Properties */
       id: '0', // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
@@ -172,15 +131,17 @@ export default class Home extends Component {
       // userInfo: // (optional) default: null (object containing additional notification data)
 
       /* iOS and Android properties */
-      title: "Location has changed!", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
-      message: inOffice(location.longitude, location.latitude) ? "You are inside the building!" : "You're not in the building!", // (required)
+      title: "Careful", // (optional, for iOS this is only used in apple watch, the title will be the app name on other iOS devices)
+      message: "You are the only one!",
       playSound: true, // (optional) default: true
       soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-      number: this.state.counter + 1, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      number: 1, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
     });
   }
 
   render() {
+    const {isLoading, people} = this.props.people;
+
     return <LinearGradient
 
       start={[0.0, 0.3]} end={[0.3, 1.0]}
@@ -190,15 +151,12 @@ export default class Home extends Component {
     >
       <View style={styles.numberWrapper}>
         <Text style={styles.peopleOnline}>
-          {this.state.onlinePpl}
+          {isLoading ? '.' : this.getOnlinePeople()}
         </Text>
         <Text style={styles.normalText}>
-          people in the office {this.state.inOffice ? 'true' : 'false'}
+          people in the office
+          {isLoading ? ' .... ' : people[uid] ? ' true' : ' false'}
         </Text>
-
-        <TouchableOpacity onPress={() => Actions.map()}>
-          <Text>MAp</Text>
-        </TouchableOpacity>
       </View>
     </LinearGradient>;
   }

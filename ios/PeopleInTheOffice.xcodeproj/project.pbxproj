@@ -28,6 +28,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		C50639CB1DA28BE6006DC214 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C50639C41DA28BD9006DC214 /* libRCTPushNotification.a */; };
 		C5063A101DA2AD05006DC214 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C5063A091DA2AB4F006DC214 /* libsqlite3.tbd */; };
+		D776FAC9081F4AD09F0E82F9 /* libRNNetworkInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32BD3A13B8A149E9B28AE6D9 /* libRNNetworkInfo.a */; };
 		E1385E6412B64DC88C5FE873 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE0D0508B6964EDD895DF20C /* libBVLinearGradient.a */; };
 /* End PBXBuildFile section */
 
@@ -144,6 +145,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
 		};
+		C5063B3B1DA3E7CE006DC214 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52CB4758E62C41E99929F437 /* RNNetworkInfo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 045BEB3C1B52EA6A0013C1B9;
+			remoteInfo = RNNetworkInfo;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -169,6 +177,8 @@
 		163EB620F746442DA86EAB95 /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		1C1C33CF4CA74AFE91CC95AB /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		1F75D3ECEC0F412F8730A24D /* RNLocation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNLocation.xcodeproj; path = "../node_modules/react-native-gps/RNLocation.xcodeproj"; sourceTree = "<group>"; };
+		32BD3A13B8A149E9B28AE6D9 /* libRNNetworkInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNNetworkInfo.a; sourceTree = "<group>"; };
+		52CB4758E62C41E99929F437 /* RNNetworkInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNNetworkInfo.xcodeproj; path = "../node_modules/react-native-network-info/ios/RNNetworkInfo.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7B874C529E844F178495FE6F /* libRCTBackgroundGeolocation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTBackgroundGeolocation.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -209,6 +219,7 @@
 				0E8D699BBECD4E748C195845 /* libRNDeviceInfo.a in Frameworks */,
 				5BD2B43B74C345B48DCF37EF /* libRCTBackgroundGeolocation.a in Frameworks */,
 				E1385E6412B64DC88C5FE873 /* libBVLinearGradient.a in Frameworks */,
+				D776FAC9081F4AD09F0E82F9 /* libRNNetworkInfo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +348,7 @@
 				D3DA086C52AB432DB4CF531E /* RNDeviceInfo.xcodeproj */,
 				163EB620F746442DA86EAB95 /* RCTBackgroundGeolocation.xcodeproj */,
 				8F5DA7B718184D0691110578 /* BVLinearGradient.xcodeproj */,
+				52CB4758E62C41E99929F437 /* RNNetworkInfo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -406,6 +418,14 @@
 			isa = PBXGroup;
 			children = (
 				C5063B0B1DA3C5C8006DC214 /* libBVLinearGradient.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C5063B291DA3E7CE006DC214 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C5063B3C1DA3E7CE006DC214 /* libRNNetworkInfo.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -543,6 +563,10 @@
 					ProductGroup = C502CDAF1DA2608A00F44EF9 /* Products */;
 					ProjectRef = 1F75D3ECEC0F412F8730A24D /* RNLocation.xcodeproj */;
 				},
+				{
+					ProductGroup = C5063B291DA3E7CE006DC214 /* Products */;
+					ProjectRef = 52CB4758E62C41E99929F437 /* RNNetworkInfo.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -658,6 +682,13 @@
 			remoteRef = C5063B0A1DA3C5C8006DC214 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		C5063B3C1DA3E7CE006DC214 /* libRNNetworkInfo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNNetworkInfo.a;
+			remoteRef = C5063B3B1DA3E7CE006DC214 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -682,7 +713,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -690,7 +721,7 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
 		};
@@ -753,6 +784,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PeopleInTheOffice.app/PeopleInTheOffice";
@@ -769,6 +801,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -793,6 +826,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = PeopleInTheOffice/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -821,6 +855,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				INFOPLIST_FILE = PeopleInTheOffice/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
@@ -877,6 +912,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -921,6 +957,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-mauron85-background-geolocation/ios/RCTBackgroundGeolocation",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
+					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
