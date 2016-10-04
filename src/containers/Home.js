@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  StatusBar
 } from 'react-native'
 
 import PushNotification from 'react-native-push-notification'
@@ -15,6 +16,34 @@ import DeviceInfo from 'react-native-device-info';
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
 import Client from '../lib/parse-main'
 import inOffice from '../lib/in-office'
+import LinearGradient from 'react-native-linear-gradient';
+
+const light = '#CB74FF';
+const dark = '#7737FF';
+const lightText = '#DABDFF'
+
+BackgroundGeolocation.configure({
+  desiredAccuracy: 30,
+  stationaryRadius: 0,
+  distanceFilter: 2,
+  debug: true,
+  activityType: 'Fitness',
+  stopOnTerminate: false,
+  interval: 1000,
+  fastestInterval: 500,
+  activitiesInterval:  1000,
+  stopOnStillActivity: false,
+  locationTimeout: 100,
+  url: 'http://192.168.1.137:8081/parse',
+  httpHeaders: {
+    'X-Parse-Application-Id': 'hackathon'
+  }
+});
+
+BackgroundGeolocation.start(() => {
+  Alert.alert('started!')
+  console.log('[DEBUG] BackgroundGeolocation started successfully');
+});
 
 export default class Home extends Component {
 
@@ -24,31 +53,21 @@ export default class Home extends Component {
     this.state = {
       onlinePpl: 0,
       inOffice: null,
-      uid: DeviceInfo.getUniqueID()
+      uid: DeviceInfo.getUniqueID(),
+      counter: 0
     }
     this.subscription = null;
   }
 
   componentWillMount() {
-    this.subscription = Client.createSubscription();
-    BackgroundGeolocation.configure({
-      desiredAccuracy: 5,
-      stationaryRadius: 10,
-      activityType: 'AutomotiveNavigation',
-      distanceFilter: 2,
-      debug: false,
-      stopOnTerminate: false,
-      interval: 500,
-      url: 'http://192.168.1.137:8080/parse',
-      httpHeaders: {
-        'X-Parse-Application-Id': 'hackathon'
-      }
-    });
+    if (Platform.OS === 'ios') {
+      StatusBar.setBarStyle('light-content');
+    } else {
+      StatusBar.setTranslucent(true)
+      StatusBar.setBackgroundColor('transparent')
+    }
 
-    BackgroundGeolocation.start(() => {
-      Alert.alert('started!')
-      console.log('[DEBUG] BackgroundGeolocation started successfully');
-    });
+    this.subscription = Client.createSubscription();
   }
 
   componentDidMount() {
@@ -65,33 +84,52 @@ export default class Home extends Component {
       })
     });
 
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // Alert.alert(String(position.coords.longitude), String(position.coords.latitude))
+        this.setState({
+          location: position.coords,
+          inOffice: inOffice(position.coords.longitude, position.coords.latitude)
+        })
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 1000, maximumAge: 0}
+    );
+
     BackgroundGeolocation.on('location', (location) => {
       // console.log('[DEBUG] BackgroundGeolocation location', location);
       const {longitude, latitude} = location;
 
-      Alert.alert('location changed')
+      // Alert.alert('location changed');
+
+      this.notifyUser(location);
+
+
+      Client.updateLocation(this.state.uid, inOffice(longitude, latitude))
+
 
       this.setState({
+        counter: this.state.counter + 1,
         location,
         inOffice: inOffice(longitude, latitude)
       })
     });
 
 
-    BackgroundGeolocation.on('stationary', (stationaryLocation) => {
-
-      Alert.alert('stationary')
-      //handle stationary locations here
-      //  Actions.sendLocation(stationaryLocation);
-      // console.log('[DEBUG] BackgroundGeolocation location', location);
-      const {longitude, latitude} = stationaryLocation;
-      Alert.alert(JSON.stringify(stationaryLocation))
-
-      this.setState({
-        location: stationaryLocation,
-        inOffice: inOffice(longitude, latitude)
-      })
-   });
+  //   BackgroundGeolocation.on('stationary', (stationaryLocation) => {
+   //
+      // Alert.alert('stationary')
+  //     //handle stationary locations here
+  //     //  Actions.sendLocation(stationaryLocation);
+  //     // console.log('[DEBUG] BackgroundGeolocation location', location);
+  //     const {longitude, latitude} = stationaryLocation;
+      // Alert.alert(JSON.stringify(stationaryLocation))
+   //
+  //     this.setState({
+  //       location: stationaryLocation,
+  //       inOffice: inOffice(longitude, latitude)
+  //     })
+  //  });
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -103,7 +141,7 @@ export default class Home extends Component {
 
       // Alert.alert('will update');
       // Alert.alert(this.state.inOffice + ' -- ' + nextState.inOffice + ' -- ' + inOffice(longitude, latitude))
-      Client.updateLocation(this.state.uid, inOffice(longitude, latitude))
+      // Client.updateLocation(this.state.uid, inOffice(longitude, latitude))
     }
   }
 
@@ -143,16 +181,26 @@ export default class Home extends Component {
   }
 
   render() {
-    return <View style={styles.container}>
+    return <LinearGradient
+
+      start={[0.0, 0.3]} end={[0.3, 1.0]}
+      locations={[0, 0.8]}
+      colors={[light, dark]}
+      style={styles.container}
+    >
       <View style={styles.numberWrapper}>
         <Text style={styles.peopleOnline}>
           {this.state.onlinePpl}
         </Text>
-        <Text>
-          people in the office
+        <Text style={styles.normalText}>
+          people in the office {this.state.inOffice ? 'true' : 'false'}
         </Text>
+
+        <TouchableOpacity onPress={() => Actions.map()}>
+          <Text>MAp</Text>
+        </TouchableOpacity>
       </View>
-    </View>;
+    </LinearGradient>;
   }
 }
 
@@ -160,27 +208,22 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#fff',
     flex: 1
   },
   numberWrapper: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'transparent'
+  },
+  normalText: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 18
   },
   peopleOnline: {
-    fontSize: 160,
-    lineHeight: 160
-  },
-  mapButton: {
-    flex: .1,
-    backgroundColor: "#09c",
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  mapButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16
+    fontSize: 256,
+    lineHeight: 256,
+    fontWeight: '100',
+    color: "#fff"
   }
 });
