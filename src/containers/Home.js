@@ -12,14 +12,42 @@ import PushNotification from 'react-native-push-notification'
 import inOffice from '../lib/in-office';
 import {Actions} from 'react-native-router-flux';
 import Device from '../components/DeviceInfo';
+import Client from '../lib/parse-main'
 
 
 export default class Home extends Component {
 
   constructor() {
-    super()
+    super();
+
+    this.state = {
+      onlinePpl: 0
+    }
+    this.subscription = null;
   }
 
+  componentWillMount() {
+    this.subscription = Client.createSubscription();
+  }
+
+  componentDidMount() {
+    Client.getOfficeDetails((res) => {
+      this.setState({
+        onlinePpl: res.get('online')
+      })
+    });
+
+    Client.onOnlineChange(this.subscription, (res) => {
+      this.setState({
+        onlinePpl: res.get('online')
+      })
+    })
+  }
+
+  componentWIllUnmount() {
+    Client.unsubscribe(this.subscription);
+    this.subscription = null;
+  }
 
   notifyUser(location) {
     PushNotification.localNotification({
@@ -55,7 +83,7 @@ export default class Home extends Component {
     return <View style={styles.container}>
       <View style={styles.numberWrapper}>
         <Text style={styles.peopleOnline}>
-          {Math.round(Math.random() * 100)}
+          {this.state.onlinePpl}
         </Text>
         <Text>
           people in the office

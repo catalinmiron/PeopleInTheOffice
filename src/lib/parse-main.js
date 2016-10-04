@@ -19,6 +19,15 @@ function createSubscription(office = 'Bucharest') {
   return query.subscribe()
 }
 
+function getOfficeDetails(callback, office = 'Bucharest') {
+  new Parse.Query(`${office}Office`).first({
+    'success': (res) => {
+      return callback(res)
+    },
+    'error': (error) => {console.error(error)}
+  })
+}
+
 function onOnlineChange(subscription, callback) {
   subscription.on('update', callback)
 }
@@ -33,4 +42,5 @@ module.exports = {
   createSubscription,
   onOnlineChange,
   unsubscribe,
+  getOfficeDetails
 }
