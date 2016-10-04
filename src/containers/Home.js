@@ -1,94 +1,23 @@
 import React, { Component } from 'react';
-import { Alert, Vibration, Platform, AppRegistry, StyleSheet, Text, View, DeviceEventEmitter, Linking, Dimensions, TouchableHighlight } from 'react-native'
-import moment from 'moment'
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from 'react-native'
 
-var PushNotification = require('react-native-push-notification');
-
-PushNotification.configure({
-
-    // (optional) Called when Token is generated (iOS and Android)
-    onRegister: function(token) {
-        // Alert.alert(token)
-        console.log( 'TOKEN:', token );
-    },
-
-    // (required) Called when a remote or local notification is opened or received
-    onNotification: function(notification) {
-        // Alert.alert(notification)
-        console.log( 'NOTIFICATION:', notification );
-    },
-
-    // ANDROID ONLY: GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-    // senderID: "YOUR GCM SENDER ID",
-
-    // IOS ONLY (optional): default: all - Permissions to register.
-    permissions: {
-        alert: true,
-        badge: false,
-        sound: true
-    },
-
-    // Should the initial notification be popped automatically
-    // default: true
-    popInitialNotification: true,
-
-    /**
-      * (optional) default: true
-      * - Specified if permissions (ios) and token (android and ios) will requested or not,
-      * - if not, you must call PushNotificationsHandler.requestPermissions() later
-      */
-    requestPermissions: true,
-});
-
-const deviceWidth = Dimensions.get('window').width
-const deviceHeight = Dimensions.get('window').height
-
-var { RNLocation: Location } = require('NativeModules');
+import PushNotification from 'react-native-push-notification'
 import inOffice from '../lib/in-office';
-
-// Location.startUpdatingHeading();
+import {Actions} from 'react-native-router-flux';
 
 export default class Home extends Component {
 
   constructor() {
     super()
-    this.state = {
-      location: {
-        course:358.28,
-        speed:0,
-        longitude:-122.02322184,
-        latitude:37.33743371,
-        accuracy:5,
-        altitude:0,
-        altitudeAccuracy:-1,
-        timestamp:0
-      },
-      counter: 0
-    }
   }
 
-  componentWillMount() {
-    // Location.requestWhenInUseAuthorization()
-    // Location.requestAlwaysAuthorization()
-    // Location.startUpdatingLocation()
-    if (Platform.OS === 'ios') {
-      Location.requestAlwaysAuthorization();
-      Location.setAllowsBackgroundLocationUpdates(true);
-      Location.setDistanceFilter(3.0);
-      Location.setDesiredAccuracy(1);
-      Location.startMonitoringSignificantLocationChanges();
-    } else {
-      Location.requestAlwaysAuthorization()
-    }
-    DeviceEventEmitter.addListener('locationUpdated', (location) => {
-      // if(this.state.hasSeenNotification) {
-        this.notifyUser(location);
-
-        this.setState({'location':location, counter: this.state.counter + 1})
-      // }
-
-    })
-  }
 
   notifyUser(location) {
     PushNotification.localNotification({
@@ -120,188 +49,48 @@ export default class Home extends Component {
     });
   }
 
-  isInOffice() {
-    const {longitude, latitude} = this.state.location;
-    // inOffice(longitude, latitude, office)
-    return inOffice(longitude, latitude);
-  }
-
   render() {
-    const repoUrl = 'https://github.com/timfpark/react-native-location'
-
-    return (
-      <View style={styles.container}>
-        <View style={{alignItems:'center',marginTop:30}}>
-          <Text style={[styles.text,{textAlign:'center',fontSize:30,fontWeight:'bold'}]}>
-            react-native-location
-          </Text>
-          <TouchableHighlight onPress={() => { Linking.openURL(repoUrl).catch(err => console.error('An error occurred', err)); }}
-            underlayColor='#CCC' activeOpacity={0.8}>
-            <Text style={[styles.text,{textAlign:'center',fontSize:12,color:'#00C',textDecorationLine:'underline'}]}>
-              {repoUrl}
-            </Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableHighlight onPress={() => { Location.startUpdatingLocation() }} style={[styles.button,{backgroundColor:'#126312'}]}>
-              <Text style={[styles.text,{fontSize:30,color:'#fff'}]}>Start</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight onPress={() => { Location.stopUpdatingLocation() }} style={[styles.button,{backgroundColor:'#881717'}]}>
-              <Text style={[styles.text,{fontSize:30,color:'#fff'}]}>Stop</Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={styles.row}>
-          <View style={[styles.detailBox,{width:deviceWidth/3}]}>
-            <Text style={styles.text}>
-              in office:
-            </Text>
-            <Text style={[styles.detail,{fontSize:25}]}>
-              {this.isInOffice() ? 'true' : 'false'}
-            </Text>
-          </View>
-
-          <View style={[styles.detailBox,{width:deviceWidth/3}]}>
-            <Text style={styles.text}>
-              Speed:
-            </Text>
-            <Text style={[styles.detail,{fontSize:25}]}>
-              {this.state.location.coords}
-            </Text>
-          </View>
-
-          <View style={[styles.detailBox,{width:deviceWidth/3}]}>
-            <Text style={styles.text}>
-              Altitude
-            </Text>
-            <Text style={[styles.detail,{fontSize:25}]}>
-              {this.state.location.altitude}
-            </Text>
-          </View>
-        </View>
-
-        <View style={{alignItems:'flex-start'}}>
-          <View style={styles.row}>
-            <View style={[styles.detailBox,{width:deviceWidth/2}]}>
-              <Text style={styles.text}>
-                Latitude
-              </Text>
-              <Text style={[styles.detail,{fontSize:20}]}>
-                {this.state.location.latitude}
-              </Text>
-            </View>
-
-            <View style={[styles.detailBox,{width:deviceWidth/2}]}>
-              <Text style={styles.text}>
-                Longitude
-              </Text>
-              <Text style={[styles.text,{fontSize:20}]}>
-                {this.state.location.longitude}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.row}>
-            <View style={[styles.detailBox,{width:deviceWidth/2}]}>
-              <Text style={styles.text}>
-                Accuracy
-              </Text>
-              <Text style={[styles.detail,{fontSize:20}]}>
-                {this.state.location.accuracy}
-              </Text>
-            </View>
-
-            <View style={[styles.detailBox,{width:deviceWidth/2}]}>
-              <Text style={styles.text}>
-                Altitude Accuracy
-              </Text>
-              <Text style={[styles.detail,{fontSize:20}]}>
-                {this.state.location.altitudeAccuracy}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.row}>
-            <View style={[styles.detailBox,{width:deviceWidth/2}]}>
-              <Text style={{fontFamily:'Futura',fontSize:12}}>
-                Timestamp
-              </Text>
-              <Text style={[styles.detail,{fontSize:15}]}>
-                {this.state.location.timestamp}
-              </Text>
-            </View>
-
-            <View style={[styles.detailBox,{width:deviceWidth/2}]}>
-              <Text style={styles.text}>
-                Date / Time
-              </Text>
-              <Text style={[styles.detail,{fontSize:15}]}>
-                {moment(this.state.location.timestamp).format("MM-DD-YYYY h:mm:ss")}
-              </Text>
-            </View>
-          </View>
-
-          <View style={[styles.row,{marginTop:10}]}>
-            <View style={[styles.detailBox,{width:deviceWidth}]}>
-              <Text style={styles.json}>
-                {JSON.stringify(this.state.location)}
-              </Text>
-            </View>
-          </View>
-
-        </View>
+    return <View style={styles.container}>
+      <View style={styles.numberWrapper}>
+        <Text style={styles.peopleOnline}>
+          {Math.round(Math.random() * 100)}
+        </Text>
+        <Text>
+          people in the office
+        </Text>
       </View>
-    );
+      <TouchableOpacity style={styles.mapButton} onPress={() => Actions.map()}>
+        <Text style={styles.mapButtonText}>Map</Text>
+      </TouchableOpacity>
+    </View>;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    alignItems: 'stretch',
+    backgroundColor: '#fff',
+    flex: 1
+  },
+  numberWrapper: {
+    flex: 1,
     alignItems: 'center',
-    backgroundColor: '#CCCCCC',
-    height:deviceHeight,
+    justifyContent: 'center'
   },
-  row: {
-    flex:1,
-    width:deviceWidth,
-    flexDirection:'row',
-    alignItems:'flex-start',
-    justifyContent:'space-between',
-    marginTop:5,
-    marginBottom:5,
+  peopleOnline: {
+    fontSize: 160,
+    lineHeight: 160
   },
-  detailBox: {
-    padding:15,
-    height:75,
-    justifyContent:'center'
+  mapButton: {
+    flex: .1,
+    backgroundColor: "#09c",
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  button: {
-    marginLeft:10,
-    marginRight:10,
-    marginTop:15,
-    backgroundColor:'#0C0',
-    borderRadius:10,
-    alignItems:'center',
-    justifyContent:'center',
-    padding:10,
-    width:(deviceWidth/2)-40
-  },
-  text: {
-    fontFamily:'Futura',
-    fontSize:12
-  },
-  detail: {
-    fontFamily:'Futura',
-    fontSize:12,
-    fontWeight:'bold'
-  },
-  json: {
-    fontSize: 12,
-    fontFamily: 'Courier',
-    textAlign: 'center',
-    fontWeight:'bold'
+  mapButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16
   }
 });
