@@ -9,11 +9,13 @@ import {
 } from 'react-native'
 
 import PushNotification from 'react-native-push-notification'
-import inOffice from '../lib/in-office';
 import {Actions} from 'react-native-router-flux';
 import Device from '../components/DeviceInfo';
-import Client from '../lib/parse-main'
+import DeviceInfo from 'react-native-device-info';
 
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
+import Client from '../lib/parse-main'
+import inOffice from '../lib/in-office'
 
 export default class Home extends Component {
 
@@ -21,16 +23,37 @@ export default class Home extends Component {
     super();
 
     this.state = {
-      onlinePpl: 0
+      onlinePpl: 0,
+      inOffice: null,
+      uid: DeviceInfo.getUniqueID()
     }
     this.subscription = null;
   }
 
   componentWillMount() {
     this.subscription = Client.createSubscription();
+    BackgroundGeolocation.configure({
+      desiredAccuracy: 5,
+      stationaryRadius: 10,
+      activityType: 'AutomotiveNavigation',
+      distanceFilter: 2,
+      debug: false,
+      stopOnTerminate: false,
+      interval: 500,
+      url: 'http://192.168.1.137:8080/parse',
+      httpHeaders: {
+        'X-Parse-Application-Id': 'hackathon'
+      }
+    });
+
+    BackgroundGeolocation.start(() => {
+      Alert.alert('started!')
+      console.log('[DEBUG] BackgroundGeolocation started successfully');
+    });
   }
 
   componentDidMount() {
+    // Client.updateLocation(this.state.uid, false)
     Client.getOfficeDetails((res) => {
       this.setState({
         onlinePpl: res.get('online')
@@ -41,7 +64,48 @@ export default class Home extends Component {
       this.setState({
         onlinePpl: res.get('online')
       })
-    })
+    });
+
+    BackgroundGeolocation.on('location', (location) => {
+      // console.log('[DEBUG] BackgroundGeolocation location', location);
+      const {longitude, latitude} = location;
+
+      Alert.alert('location changed')
+
+      this.setState({
+        location,
+        inOffice: inOffice(longitude, latitude)
+      })
+    });
+
+
+    BackgroundGeolocation.on('stationary', (stationaryLocation) => {
+
+      Alert.alert('stationary')
+      //handle stationary locations here
+      //  Actions.sendLocation(stationaryLocation);
+      // console.log('[DEBUG] BackgroundGeolocation location', location);
+      const {longitude, latitude} = stationaryLocation;
+      Alert.alert(JSON.stringify(stationaryLocation))
+
+      this.setState({
+        location: stationaryLocation,
+        inOffice: inOffice(longitude, latitude)
+      })
+   });
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (!nextState.inOffice && !this.state.inOffice) {
+      return;
+    }
+    if(nextState.inOffice !== this.state.inOffice) {
+      const {longitude, latitude} = nextState.location;
+
+      // Alert.alert('will update');
+      // Alert.alert(this.state.inOffice + ' -- ' + nextState.inOffice + ' -- ' + inOffice(longitude, latitude))
+      Client.updateLocation(this.state.uid, inOffice(longitude, latitude))
+    }
   }
 
   componentWIllUnmount() {
@@ -86,7 +150,7 @@ export default class Home extends Component {
           {this.state.onlinePpl}
         </Text>
         <Text>
-          people in the office
+          people in the office {this.state.inOffice ? 'true' : 'false'}
         </Text>
         <Device />
       </View>
