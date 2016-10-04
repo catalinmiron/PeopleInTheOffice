@@ -14,6 +14,23 @@ function updateLocation(uniqueId, isInOffice) {
   })
 }
 
+function createSubscription(office = 'Bucharest') {
+  let query = new Parse.Query(`${office}Office`)
+  return query.subscribe()
+}
+
+function onOnlineChange(subscription, callback) {
+  subscription.on('update', callback)
+}
+
+function unsubscribe(subscription) {
+  subscription.unsubscribe()
+  Parse.LiveQuery.close()
+}
+
 module.exports = {
   updateLocation,
+  createSubscription,
+  onOnlineChange,
+  unsubscribe,
 }
