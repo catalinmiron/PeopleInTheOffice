@@ -135,7 +135,6 @@ export default class Home extends Component {
         <Text style={styles.normalText}>
           {isLoading ? '...'
                      : isOnline ? 'people in the office' : 'You are offline'}
-          {isLoading ? '.... ' : people[uid] ? ' true' : ' false'}
         </Text>
       </View>
     </LinearGradient>;
