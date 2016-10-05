@@ -6,10 +6,14 @@ export function listen() {
   return (dispatch, getState) => {
     const {server, auth} = getState();
     listenRef = server.database().ref();
-    
+
     listenRef.on('value', snapshot => {
       dispatch({type: 'peopleReady', payload: snapshot.val()})
     })
+
+    listenRef.child('.info/connected').on('value', function(connectedSnap) {
+      dispatch({type: 'isOnline', status: connectedSnap.val()})
+    });
 
     dispatch({
       type: 'listening'

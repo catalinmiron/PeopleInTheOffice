@@ -19,36 +19,15 @@ import NetworkInfo from 'react-native-network-info';
 
 
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation';
-// import Client from '../lib/parse-main'
-import inOffice from '../lib/in-office'
 import LinearGradient from 'react-native-linear-gradient';
 
 const light = '#CB74FF';
 const dark = '#7737FF';
-const lightText = '#DABDFF'
-//
-// BackgroundGeolocation.configure({
-//   desiredAccuracy: 5,
-//   stationaryRadius: 0,
-//   distanceFilter: 2,
-//   debug: true,
-//   activityType: 'Fitness',
-//   stopOnTerminate: false,
-//   interval: 1000,
-//   fastestInterval: 500,
-//   activitiesInterval:  1000,
-//   stopOnStillActivity: false,
-//   locationTimeout: 100,
-//   url: 'http://192.168.1.137:8081/parse',
-//   httpHeaders: {
-//     'X-Parse-Application-Id': 'hackathon'
-//   }
-// });
 
-// BackgroundGeolocation.start(() => {
-//   Alert.alert('started!')
-//   console.log('[DEBUG] BackgroundGeolocation started successfully');
-// });
+const lightText = '#DABDFF';
+
+const lightRed = '#FD96AF';
+const darkRed = '#F35274';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -100,6 +79,7 @@ export default class Home extends Component {
     if (nextProps.people.isLoading) {
       return;
     }
+
     if(nextProps.people.people[uid] && this.getOnlinePeople(nextProps.people.people) === 1) {
       this.notifyUser()
     }
@@ -140,13 +120,12 @@ export default class Home extends Component {
   }
 
   render() {
-    const {isLoading, people} = this.props.people;
+    const {isOnline, isLoading, people} = this.props.people;
 
     return <LinearGradient
-
-      start={[0.0, 0.3]} end={[0.3, 1.0]}
-      locations={[0, 0.8]}
-      colors={[light, dark]}
+      start={[0.0, 0.1]} end={[0.4, 1.0]}
+      locations={[0, 0.5]}
+      colors={isOnline ? [light, dark] : [lightRed, darkRed]}
       style={styles.container}
     >
       <View style={styles.numberWrapper}>
@@ -154,8 +133,9 @@ export default class Home extends Component {
           {isLoading ? '.' : this.getOnlinePeople()}
         </Text>
         <Text style={styles.normalText}>
-          people in the office
-          {isLoading ? ' .... ' : people[uid] ? ' true' : ' false'}
+          {isLoading ? '...'
+                     : isOnline ? 'people in the office' : 'You are offline'}
+          {isLoading ? '.... ' : people[uid] ? ' true' : ' false'}
         </Text>
       </View>
     </LinearGradient>;
@@ -182,6 +162,13 @@ const styles = StyleSheet.create({
     fontSize: 256,
     lineHeight: 256,
     fontWeight: '100',
-    color: "#fff"
+    color: "#fff",
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 5
+    },
+    shadowOpacity: .3,
+    shadowRadius: 5
   }
 });
