@@ -1,9 +1,11 @@
 import _ from "lodash";
+import {Alert} from 'react-native'
 
 const initialState = {
   listening: false,
   error: null,
-  isLoading: true
+  isLoading: true,
+  isOnline: true
 };
 
 const actionsMap = {
@@ -11,6 +13,11 @@ const actionsMap = {
     return Object.assign({}, state, {
       people: payload,
       isLoading: false
+    })
+  },
+  isOnline(state, status) {
+    return Object.assign({}, state, {
+      isOnline: status.status
     })
   },
   listening(state, action) {
