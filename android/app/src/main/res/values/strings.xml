@@ -1,4 +1,5 @@
 <resources>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">U2I4MILU7oCvTv0hlXMlw0gDeIZ7N1hr8b6wl</string>
     <string name="app_name">PeopleInTheOffice</string>
     <string name="account_type">com.PeopleInTheOffice.account</string>
     <string name="content_authority">com.PeopleInTheOffice.authority</string>

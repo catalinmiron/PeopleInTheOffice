@@ -6,6 +6,9 @@ import {Actions, Scene, Router, Reducer, Schema} from 'react-native-router-flux'
 import Home from './Home';
 import Map from './Map';
 
+var AppState = require("AppState")
+import codePush from "react-native-code-push";
+
 var PushNotification = require('react-native-push-notification');
 
 @connect(
@@ -13,7 +16,17 @@ var PushNotification = require('react-native-push-notification');
   dispatch => ({ dispatch })
 )
 export default class AppRouter extends Component {
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  handleAppStateChange(appState) {
+    if (appState === 'active') {
+      codePush.sync({installMode: codePush.InstallMode.IMMEDIATE});
+    }
+  }
   componentWillMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
       onRegister: function(token) {
