@@ -1,5 +1,7 @@
 # PeopleInTheOffice
 
+Cross-platform mobile app designed to answer the question "Am I the last person left in the office?". Powered by React Native.
+
 Based on [jhen0409/react-native-boilerplate](https://github.com/jhen0409/react-native-boilerplate).
 
 ## Included
